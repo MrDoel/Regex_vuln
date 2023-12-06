@@ -1,0 +1,105 @@
+XSS Detection:
+/<script[^>]*>[^<]+<\/script>/
+This regex looks for script tags with content, which might indicate inline scripting.
+
+SQL Injection Detection:
+/(\bselect\b|\binsert\b|\bupdate\b|\bdelete\b)\s+\bfrom\b\s+\w+/i
+This regex detects basic SQL commands, which might be part of SQL injection if combined with user input.
+
+Path Traversal Detection:
+/\.\.\//
+
+=====
+Buffer Overflow:
+
+Vulnerability: Occurs when a program writes more data to a buffer than it can hold, potentially allowing an attacker to execute arbitrary code.
+Regex Example: /\bstrcpy\b|\bstrcat\b/
+Looks for dangerous functions like strcpy or strcat that can lead to buffer overflows if not used carefully.
+Race Condition:
+
+Vulnerability: Occurs when the output or behavior of a system depends on the sequence or timing of uncontrollable events.
+Regex Example: /thread\s*.*\s*write\s*.*\s*read/
+Attempts to identify patterns where multiple threads might be reading and writing to the same resource, potentially leading to a race condition.
+Improper Error Handling:
+
+Vulnerability: Poorly handled errors can leak information about the system or lead to unintended behavior.
+Regex Example: /catch\s*\(\s*\)\s*{.*console\.log/
+Detects instances where errors might be caught but not properly handled, with potential logging of sensitive information.
+Insecure File Uploads:
+
+Vulnerability: Allowing users to upload files without proper validation can lead to the execution of malicious code.
+Regex Example: /file\.upload\s*\(.*req\.files/
+Looks for file upload handling that might not include sufficient validation checks.
+Exposed Sensitive Information:
+
+Vulnerability: Sensitive information like passwords, tokens, or secrets are exposed in the code or logs.
+Regex Example: /password\s*=\s*".*"/
+Searches for hardcoded passwords or sensitive information in the codebase.
+Hardcoded Credentials:
+
+Vulnerability: Embedding credentials in source code can lead to security breaches if the code is exposed.
+Regex Example: /username\s*=\s*".*"\s*password\s*=\s*".*"/
+Detects patterns where credentials might be hardcoded in the application.
+Missing Authentication for Critical Function:
+
+Vulnerability: Critical functions are accessible without proper authentication.
+Regex Example: /function\s+\w+\s*\(.*\)\s*{.*if\s*\(.*authenticated.*\)\s*return/
+Looks for functions that might be missing necessary authentication checks.
+Mass Assignment:
+
+Vulnerability: Assigning user-supplied data to model objects without proper filtering can lead to unauthorized data modifications.
+Regex Example: /\w+\.create\s*\(req\.body\)/
+Identifies patterns where data from request bodies is directly assigned to objects, which can be a mass assignment vulnerability.
+Missing Authorization:
+
+Vulnerability: Functions or endpoints are accessible without proper authorization checks.
+Regex Example: /router\.\w+\s*\(\s*'.*'\s*,\s*\w+\)/
+Searches for routes that might not have explicit authorization middleware or checks.
+Use of Hard-Coded Cryptographic Key:
+
+Vulnerability: Using hard-coded or weak cryptographic keys can compromise the security of encrypted data.
+Regex Example: /AES\.encrypt\s*\(.*\s*,\s*".{8,}"/
+Looks for encryption functions that might use hard-coded keys.
+
+
+
+Command Injection:
+
+Vulnerability: Occurs when an application passes unsafe user-supplied data (forms, cookies, HTTP headers) to a system shell.
+Regex Example: /\bexec\s*\(\s*req\.param/
+This regex looks for instances where exec() or similar command execution functions are used with direct user input, a potential command injection vulnerability.
+Local File Inclusion (LFI):
+
+Vulnerability: Allows attackers to include files on a server through the web browser.
+Regex Example: /include\s*\(\s*req\.param/
+Detects patterns where local file inclusion might be possible, typically through file handling functions.
+Server-Side Request Forgery (SSRF):
+
+Vulnerability: The server is tricked into performing requests on behalf of the attacker.
+Regex Example: /http\.get\s*\(\s*req\.param/
+Looks for patterns where external HTTP requests might be constructed from user inputs.
+LDAP Injection:
+
+Vulnerability: Occurs when user input is not properly sanitized before being used in an LDAP query.
+Regex Example: /ldapsearch\s*\(\s*.*req\.param/
+Searches for LDAP queries that might include unfiltered user input.
+XML External Entity (XXE):
+
+Vulnerability: Attack against an application that parses XML input. This can lead to confidential data disclosure, denial of service, server-side request forgery, and other system impacts.
+Regex Example: /new\s+XMLReader/
+Looks for instances of XML parsing without mentioning security measures against XXE.
+Insecure Deserialization:
+
+Vulnerability: Involves deserializing data from untrusted sources which can lead to remote code execution, replay attacks, injection attacks, etc.
+Regex Example: /deserialize\s*\(\s*req\.body/
+Detects deserialization functions used with potentially untrusted data sources like request bodies.
+Open Redirects:
+
+Vulnerability: Redirecting users to a URL from untrusted input, which can be used in phishing attacks.
+Regex Example: /redirect\s*\(\s*req\.param/
+Identifies redirection methods that might use unvalidated user inputs.
+Cryptography Issues:
+
+Vulnerability: Weak cryptography or incorrect implementation, leading to compromised data security.
+Regex Example: /\bmd5\b|\bsha1\b/
+Searches for outdated or weak cryptographic functions like MD5 or SHA-1.

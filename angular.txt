@@ -1,0 +1,26 @@
+Hard-Coded Creds
+
+(api_key|apikey|password|secret|private_key|access_token|auth_token|credentials|passwd|passphrase)['"]?\s*[:=]\s*['"][^'"\s]+['"]
+
+Input Validation (Potential XSS): Look for instances where user input might be directly inserted into the DOM.
+
+\{\{.*\}\}
+ng-bind-html=['"]?[^'^"]+['"]?
+\$scope\.|\$element\.
+\.innerHTML\s*=
+\<form[^\>]*\>(?:(?!ng-submit|formGroup).)*\</form\>
+This regex matches AngularJS expressions which might include user inputs. However, it's a broad match and may result in many false positives.
+
+Unsafe AngularJS $sce Usage:
+\$sce\.trustAsHtml|trustAsResourceUrl|trustAsJs|trustAsUrl
+
+Insecure Direct Object References: Look for patterns where resources are directly referenced.
+\/api\/.*\/[0-9]+
+This regex aims to find direct object references in API URLs, such as numeric IDs. It's very simplistic and needs to be tailored to your API URL structure.
+
+Improper Error Handling: Find instances of console logging or alerting error messages.
+console\.log|alert
+This regex looks for console.log or alert statements, which might be used for error logging.
+
+Insecure File Uploads: Look for file upload fields without explicit validation checks.
+\<input.*type=['"]?file['"]?.*\>
